@@ -1,4 +1,4 @@
-# Panorama Analytics
+# Business Analytics
 
 A reporting and analytics web app for e-commerce sales data, with role-based access control and an AI analyst that answers questions in plain English using retrieval-augmented generation (RAG).
 
