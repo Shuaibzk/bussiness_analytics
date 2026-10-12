@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #04050c;
+  --color-heading: #eef0f6;
+  --color-muted: #b9becf;
+}
+
+:root {
+  --hero-base: #04050c;
+  --heading: #eef0f6;
+  --body-muted: #b9becf;
+  --on-media: #ffffff;
+  --action-inverse: #ffffff;
+  --action-inverse-fg: #2f2f33;
+  --glass-fill: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --scrim: rgba(4, 5, 12, 0.46);
+  --scrim-strong: rgba(4, 5, 12, 0.68);
+  --scrim-soft: rgba(4, 5, 12, 0.12);
+  --duration-fast: 150ms;
+  --ease-entrance: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: dark;
+}
+
+/* adaptive rem grid: the whole layout scales with the viewport */
+html { font-size: 16px; }
+@media (max-width: 1920px) { html { font-size: 0.833333vw; } }
+@media (max-width: 1440px) { html { font-size: 1.111111vw; } }
+@media (max-width: 1024px) { html { font-size: 1.5625vw; } }
+@media (max-width: 640px) { html { font-size: 4.444444vw; } }
+/* never let the data UI become unreadably small on short/narrow desktop windows */
+@media (min-width: 641px) and (max-width: 1920px) { html { font-size: max(0.833333vw, 13px); } }
+@media (min-width: 641px) and (max-width: 1440px) { html { font-size: max(1.111111vw, 13.5px); } }
+@media (min-width: 641px) and (max-width: 1024px) { html { font-size: max(1.5625vw, 14px); } }
+
+/* NB: base rules live in @layer base - unlayered resets would override every Tailwind utility (margins, etc.) */
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    background: var(--hero-base);
+    color: var(--heading);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; }
+  h1, h2, h3 { font-weight: 500; letter-spacing: -0.02em; }
+}
+
+/* ---- glass surfaces ------------------------------------------------------ */
+.glass {
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+/* panels that hold data: darker so charts stay legible over the moving ink */
+.panel {
+  background: rgba(8, 10, 22, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* shared white pill button */
+.pill-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  height: 2.5rem; border-radius: 9999px; background: var(--action-inverse); padding: 0 1.125rem;
+  font-size: 0.85rem; font-weight: 500; color: var(--action-inverse-fg); white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background var(--duration-fast) var(--ease-entrance), opacity var(--duration-fast) var(--ease-entrance);
+}
+.pill-btn:hover { background: rgba(255, 255, 255, 0.85); }
+.pill-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7); }
+.pill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+@media (min-width: 640px) { .pill-btn { height: 2.75rem; padding: 0 1.375rem; font-size: 0.95rem; } }
+
+.pill-ghost {
+  display: inline-flex; align-items: center; gap: 0.4rem; border-radius: 9999px;
+  border: 1px solid var(--glass-border); background: var(--glass-fill);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--body-muted);
+  transition: color var(--duration-fast) var(--ease-entrance), background var(--duration-fast) var(--ease-entrance);
+}
+.pill-ghost:hover { color: var(--heading); background: rgba(255, 255, 255, 0.13); }
+
+.hairline { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent); height: 1px; }
+
+@keyframes shimmer { to { background-position: -200% 0; } }
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 37%, rgba(255,255,255,0.04) 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 1rem;
+}
+
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
+
+/* chat markdown-ish */
+.prose-chat p { margin: 0 0 0.6em; }
+.prose-chat p:last-child { margin-bottom: 0; }
+.prose-chat strong { color: #fff; font-weight: 500; }
+.prose-chat ul { margin: 0.3em 0 0.6em 1.1em; list-style: disc; }
+.prose-chat em { color: var(--body-muted); }
+
+@keyframes blink { 50% { opacity: 0; } }
+.caret::after { content: "\258B"; margin-left: 2px; color: #7ee7ff; animation: blink 1s steps(1) infinite; }
+
+input::placeholder { color: var(--body-muted); opacity: 1; }
+.recharts-tooltip-wrapper { outline: none; }
+
+/* ---- accessibility ------------------------------------------------------ */
+:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.75); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---- print / "Save as PDF" ---------------------------------------------- */
+.print-only { display: none; }
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  html, body, #root { height: auto !important; overflow: visible !important; background: #fff !important; font-size: 12px !important; }
+  #root > div, .print-root, main { display: block !important; height: auto !important; overflow: visible !important; position: static !important; }
+  .no-print, header, nav { display: none !important; }
+  .print-only { display: block !important; }
+  * { color: #111 !important; text-shadow: none !important; animation: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  .panel, .glass { background: #fff !important; border: 1px solid #cfd2da !important; box-shadow: none !important; }
+  .panel { break-inside: avoid; page-break-inside: avoid; margin-bottom: 8px; }
+  .recharts-text, .recharts-cartesian-axis-tick-value { fill: #333 !important; }
+  .recharts-cartesian-grid line { stroke: #e3e5ea !important; }
+  .skeleton { display: none !important; }
+  [style*="opacity: 0"] { opacity: 1 !important; transform: none !important; }
+}

@@ -1,0 +1,36 @@
+# ---- secrets and local state: never commit ----
+backend/.env
+backend/data/
+*.pem
+*.key
+
+# ---- confidential data: the dataset and anything derived from it ----
+*.csv
+*.xlsx
+*.sqlite
+*.sqlite3
+*.db
+*.sql.gz
+backups/
+backend/tests/last_eval.json
+
+# ---- personal notes ----
+read.md
+INTERVIEW_GUIDE.md
+
+# ---- build output, caches, dependencies ----
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/node_modules/
+frontend/dist/
+.cache/
+.tmp/
+.vite/
+
+# ---- editor / OS ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
